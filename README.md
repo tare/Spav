@@ -3,6 +3,8 @@ A tool for visualizing Splotch results
 
 ## Usage
 
+### Data preparation
+
 The script ``spav_prepare_data.py`` can be used for preparing the Splotch results to be used with Spav
 ```console
 $ python spav_prepare_data.py --help
@@ -19,6 +21,7 @@ optional arguments:
                         output directory
   -s SERVER_DIRECTORY, --server-directory SERVER_DIRECTORY
                         server directory
+  -c, --no-copy         create symbolic links instead of copying images
   -v, --version         show program's version number and exit
 ```
 
@@ -26,6 +29,10 @@ For instance, you can run the following command
 ```console
 $ python spav_prepare_data.py -d $DATA_DIRECTORY -o $OUTPUT_DIRECTORY -s $SPAV_DIRECTORY
 ```
+
+### Deployment
+
+#### Standalone Bokeh server
 
 The script ``main.py`` implements our Bokeh application
 ```console
@@ -49,3 +56,7 @@ To fire up the Bokeh application with all the implemented views you can execute 
 ```console
 $ bokeh serve $SPAV_DIRECTORY --show --args --arrays --array --common-coordinate --aar-coefficients --level-coefficients
 ```
+
+#### Embedding the Bokeh server inside a Jupyter notebook
+
+Please see [Notebook.ipynb](Notebook.ipynb).
