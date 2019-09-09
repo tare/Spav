@@ -2,6 +2,7 @@
 
 import os
 import sys
+import shutil
 import re
 import glob
 import pickle
@@ -13,6 +14,8 @@ import numpy
 import h5py
 import scipy.stats
 
+import logging
+
 from PIL import Image
 Image.MAX_IMAGE_PIXELS = 1000000000
 
@@ -20,7 +23,7 @@ from splotch.utils import (read_stan_csv, read_array_metadata,
                            to_stan_variables, registration,
                            read_aar_matrix)
 
-def generate_data_files(data_directory,output_directory,server_directory):
+def generate_data_files(data_directory,output_directory,server_directory,copy):
   # unpickle data_directory/information.p
   sample_information = pickle.load(open(os.path.normpath('%s/information.p'%(data_directory)),'rb')) 
   # .. and extract useful variables
@@ -68,6 +71,7 @@ def generate_data_files(data_directory,output_directory,server_directory):
           tmp[:,beta_idx,aar_idx] = scipy.stats.gaussian_kde(samples[gene]['beta_level_1'][:,beta_idx,aar_idx]).evaluate(density_evaluation_points)
       density_beta_grp.create_dataset(gene,data=tmp)
  
+    # TODO: level_1 might contain slash symbols etc.
     for level_1 in beta_mapping['beta_level_1']:
       f.create_group('level_1/%s'%(level_1))
 
@@ -77,6 +81,7 @@ def generate_data_files(data_directory,output_directory,server_directory):
     files_per_level = {}
   
     for count_file in count_files:
+      # TODO: count_file might contain slash symbols etc.
       array_grp = arrays_grp.create_group(os.path.basename(count_file))
       image_array_grp = array_grp.create_group('image')
       data_array_grp = array_grp.create_group('data')
@@ -84,7 +89,14 @@ def generate_data_files(data_directory,output_directory,server_directory):
   
       image_filename = metadata[metadata['Count file'] == count_file]['Image file'].values[0]
 
-      os.symlink(os.path.normpath('%s/%s'%(os.getcwd(),image_filename)),os.path.normpath('%s/static/%s'%(server_directory,os.path.basename(image_filename))))
+      if not os.path.exists(os.path.normpath('%s/static/%s'%(server_directory,os.path.basename(image_filename)))):
+
+        if copy:
+          shutil.copy(os.path.normpath('%s/%s'%(os.getcwd(),image_filename)),os.path.normpath('%s/static/%s'%(server_directory,os.path.basename(image_filename))))
+        else:
+          os.symlink(os.path.normpath('%s/%s'%(os.getcwd(),image_filename)),os.path.normpath('%s/static/%s'%(server_directory,os.path.basename(image_filename))))
+      else:
+        logging.warning('%s was not overwritten!'%(os.path.normpath('%s/static/%s'%(server_directory,os.path.basename(image_filename)))))
 
       levels = list(map(str,read_array_metadata(metadata,count_file,n_levels)))
   
@@ -116,6 +128,7 @@ def generate_data_files(data_directory,output_directory,server_directory):
       data_array_grp.create_dataset('annotations',data=numpy.string_(annotations))
       expressions_data_array_grp = data_array_grp.create_group('expressions')
       for index,row in lambda_posterior_means[count_file].iterrows():
+        # TODO: index might contain slash symbols etc.
         expressions_data_array_grp.create_dataset(index,data=row.values)
 
       metadata_array_grp.create_dataset('levels',data=numpy.string_(levels))
@@ -138,11 +151,14 @@ if __name__ == '__main__':
   parser.add_argument('-s','--server-directory',action='store',
                       dest='server_directory',type=str,required=True,
                       help='server directory')
+  parser.add_argument('-c','--no-copy',action='store_false',dest='copy',required=False,
+                      help='create symbolic links instead of copying images')
   parser.add_argument('-v','--version',action='version',
                       version='%s %s'%(parser.prog,'0.0.1'))
 
+  parser.set_defaults(copy=True)
   options = parser.parse_args()
 
-  generate_data_files(options.data_directory,options.output_directory,options.server_directory)
+  generate_data_files(options.data_directory,options.output_directory,options.server_directory,options.copy)
 
   sys.exit(0)
