@@ -9,7 +9,7 @@ The script ``spav_prepare_data.py`` can be used for preparing the Splotch result
 ```console
 $ python spav_prepare_data.py --help
 usage: spav_prepare_data.py [-h] -d DATA_DIRECTORY -o OUTPUT_DIRECTORY -s
-                            SERVER_DIRECTORY [-v]
+                            SERVER_DIRECTORY [-c] [-v]
 
 A script for preparing Splotch results for Span
 
