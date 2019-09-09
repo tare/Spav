@@ -40,7 +40,9 @@ class ExpressionOnArrays:
 
     self.error_pretext = bokeh.models.widgets.Div(text='',width=125,height=20)
 
-    self.plots = self.__plot()
+    self.__plots = self.__plot()
+
+    self.layout = bokeh.layouts.layout([bokeh.layouts.layout(self.__plots[0:2]),bokeh.layouts.gridplot(self.__plots[2:-1],merge_tools=True,toolbar_location='left',toolbar_options=dict(logo=None),sizing_mode='scale_both'),bokeh.layouts.layout(self.__plots[-1])],sizing_mode='scale_both')
 
   def __read_genes(self):
     with h5py.File(self.filename,'r') as f:
@@ -191,7 +193,9 @@ class ExpressionOnArray:
     self.select_array = bokeh.models.widgets.Select(value=self.array,options=self.arrays[self.variable],title='Array:',width=100)
     self.select_array.on_change('value',self.__update_plot_array)
 
-    self.plots = self.__plot()
+    self.__plots = self.__plot()
+
+    self.layout = bokeh.layouts.layout([bokeh.layouts.layout(self.__plots[0:3]),bokeh.layouts.layout(self.__plots[3:-1],sizing_mode='scale_height'),bokeh.layouts.layout(self.__plots[-1])],sizing_mode='scale_width')
 
   def __read_genes(self):
     with h5py.File(self.filename,'r') as f:
@@ -376,7 +380,9 @@ class ExpressionInCommonCoordinate:
 
       self.s.append(s)
 
-    self.plots = self.__plot()
+    self.__plots = self.__plot()
+
+    self.layout = bokeh.layouts.layout([bokeh.layouts.layout(self.__plots[0:3]),bokeh.layouts.gridplot(self.__plots[3:-1],merge_tools=True,toolbar_location='left',toolbar_options=dict(logo=None),sizing_mode='scale_both'),bokeh.layouts.layout(self.__plots[-1])],sizing_mode='scale_both')
 
   def __read_genes(self):
     with h5py.File(self.filename,'r') as f:
@@ -538,7 +544,9 @@ class AARExpressionCoefficients:
 
       self.s.append(s)
 
-    self.plots = self.__plot()
+    self.__plots = self.__plot()
+
+    self.layout = bokeh.layouts.layout([bokeh.layouts.layout(self.__plots[0:3]),bokeh.layouts.gridplot(self.__plots[3:],merge_tools=True,toolbar_location='left',toolbar_options=dict(logo=None),sizing_mode='stretch_width')],sizing_mode='stretch_width')
 
   def __read_genes(self):
     with h5py.File(self.filename,'r') as f:
@@ -673,7 +681,9 @@ class LevelExpressionCoefficients:
 
       self.s.append(s)
 
-    self.plots = self.__plot()
+    self.__plots = self.__plot()
+
+    self.layout = bokeh.layouts.layout([bokeh.layouts.layout(self.__plots[0:3]),bokeh.layouts.gridplot(self.__plots[3:],merge_tools=True,toolbar_location='left',toolbar_options=dict(logo=None),sizing_mode='stretch_width')],sizing_mode='stretch_width')
 
   def __read_genes(self):
     with h5py.File(self.filename,'r') as f:
