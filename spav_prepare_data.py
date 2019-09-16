@@ -23,6 +23,11 @@ from splotch.utils import (read_stan_csv, read_array_metadata,
                            to_stan_variables, registration,
                            read_aar_matrix)
 
+def escape_h5py_object_name(name,escape_characters=['/']):
+  for escape_character in escape_characters:
+    name = name.replace(escape_character,' ')
+  return name
+
 def generate_data_files(data_directory,output_directory,server_directory,copy):
   # unpickle data_directory/information.p
   sample_information = pickle.load(open(os.path.normpath('%s/information.p'%(data_directory)),'rb')) 
@@ -71,9 +76,8 @@ def generate_data_files(data_directory,output_directory,server_directory,copy):
           tmp[:,beta_idx,aar_idx] = scipy.stats.gaussian_kde(samples[gene]['beta_level_1'][:,beta_idx,aar_idx]).evaluate(density_evaluation_points)
       density_beta_grp.create_dataset(gene,data=tmp)
  
-    # TODO: level_1 might contain slash symbols etc.
     for level_1 in beta_mapping['beta_level_1']:
-      f.create_group('level_1/%s'%(level_1))
+      f.create_group('level_1/%s'%(escape_h5py_object_name(level_1)))
 
     f.create_dataset('genes',data=numpy.string_(list(lambda_posterior_means.index)))
     arrays_grp = f.create_group('arrays')
@@ -81,8 +85,7 @@ def generate_data_files(data_directory,output_directory,server_directory,copy):
     files_per_level = {}
   
     for count_file in count_files:
-      # TODO: count_file might contain slash symbols etc.
-      array_grp = arrays_grp.create_group(os.path.basename(count_file))
+      array_grp = arrays_grp.create_group(escape_h5py_object_name(os.path.basename(count_file)))
       image_array_grp = array_grp.create_group('image')
       data_array_grp = array_grp.create_group('data')
       metadata_array_grp = array_grp.create_group('metadata')
@@ -128,8 +131,7 @@ def generate_data_files(data_directory,output_directory,server_directory,copy):
       data_array_grp.create_dataset('annotations',data=numpy.string_(annotations))
       expressions_data_array_grp = data_array_grp.create_group('expressions')
       for index,row in lambda_posterior_means[count_file].iterrows():
-        # TODO: index might contain slash symbols etc.
-        expressions_data_array_grp.create_dataset(index,data=row.values)
+        expressions_data_array_grp.create_dataset(escape_h5py_object_name(index),data=row.values)
 
       metadata_array_grp.create_dataset('levels',data=numpy.string_(levels))
 
