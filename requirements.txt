@@ -3,4 +3,5 @@ pandas
 bokeh
 h5py
 scipy
-PIL
+pillow
+git+https://git@github.com/tare/Splotch.git
