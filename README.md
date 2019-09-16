@@ -11,7 +11,7 @@ This view visualizes expression estimates on all the arrays simultaneously.
 ![Arrays view](images/arrays.png)
 
 ### Expression on array
-This view visualizes expression estimates on the selected array.
+This view visualizes expression estimates on a selected array.
 The user can filter arrays based on the level 1 information (see [Splotch](https://github.com/tare/Splotch)).
 ![Array view](images/array.png)
 
@@ -21,11 +21,11 @@ The expression estimates are separated based on the level 1 information.
 ![Common coordinate view](images/common_coordinate.png)
 
 ### Expression coefficients per level 1 variable
-This view visualizes expression coefficients across level 1 variables per AAR.
+This view visualizes expression coefficients across level 1 variables for each AAR.
 ![Coefficients per level 1 variable view](images/coefficients_level.png)
 
 ### Expression coefficients per anatomical annotation region (AAR)
-This view visualizes expression coefficients across AARs per level 1 variable.
+This view visualizes expression coefficients across AARs for each level 1 variable.
 ![Coefficients per AAR](images/coefficients_aar.png)
 
 ## Usage
