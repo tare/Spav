@@ -22,11 +22,11 @@ The expression estimates are separated based on the level 1 information.
 
 ### Expression coefficients per level 1 variable
 This view visualizes expression coefficients across level 1 variables per AAR.
-![Coefficients per level 1 variable view](images/coeffiecients_level.png)
+![Coefficients per level 1 variable view](images/coefficients_level.png)
 
 ### Expression coefficients per anatomical annotation region (AAR)
 This view visualizes expression coefficients across AARs per level 1 variable.
-![Coefficients per AAR](images/coeffiecients_aar.png)
+![Coefficients per AAR](images/coefficients_aar.png)
 
 ## Usage
 
