@@ -4,4 +4,4 @@ bokeh
 h5py
 scipy
 pillow
-git+https://git@github.com/tare/Splotch.git
+Splotch @ git+https://git@github.com/tare/Splotch.git@master#Splotch

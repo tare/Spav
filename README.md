@@ -2,48 +2,51 @@
 A tool for visualizing [Splotch](https://github.com/tare/Splotch) results.
 
 ## Overview
-Spav currently supports five different interactive views for visualizing and exploring Splotch results.
-
 A custom version of Spav is used on [https://als-st.nygenome.org](https://als-st.nygenome.org).
 
+Spav currently supports five different interactive views for visualizing and exploring Splotch results.
+
 ### Expression on arrays
-This view visualizes expression estimates on all the arrays simultaneously.
 ![Arrays view](images/arrays.png)
 
+This view visualizes expression estimates on all the arrays simultaneously.
+
 ### Expression on array
-This view visualizes expression estimates on a selected array.
-The user can filter arrays based on the level 1 information (see [Splotch](https://github.com/tare/Splotch)).
 ![Array view](images/array.png)
 
+This view visualizes expression estimates on a selected array. The user can filter arrays based on the level 1 information (see [Splotch](https://github.com/tare/Splotch)).
+
 ### Expression in common coordinate
-This view visualizes expression estimates in common coordinate system.
-The expression estimates are separated based on the level 1 information.
 ![Common coordinate view](images/common_coordinate.png)
 
+This view visualizes expression estimates in common coordinate system. The expression estimates are separated based on the level 1 information.
+
 ### Expression coefficients per level 1 variable
-This view visualizes expression coefficients across level 1 variables for each AAR.
 ![Coefficients per level 1 variable view](images/coefficients_level.png)
 
+This view visualizes expression coefficients across level 1 variables for each AAR.
+
 ### Expression coefficients per anatomical annotation region (AAR)
-This view visualizes expression coefficients across AARs for each level 1 variable.
 ![Coefficients per AAR](images/coefficients_aar.png)
+
+This view visualizes expression coefficients across AARs for each level 1 variable.
 
 ## Usage
 
 ### Installation
 Spav has been tested on Python 3.7.
 
-The required packages can be installed as follows
+Spav can be installed as follows
 ```console
-$ pip install -r requirements.txt
+$ pip install git+https://git@github.com/tare/Spav.git
 ```
 
 ### Data preparation
-The script ``spav_prepare_data.py`` can be used for preparing the Splotch results to be used with Spav
+The script ``spav_prepare_data`` can be used for preparing the Splotch results to be used with Spav
 ```console
-$ python spav_prepare_data.py --help
-usage: spav_prepare_data.py [-h] -d DATA_DIRECTORY -o OUTPUT_DIRECTORY -s
-                            SERVER_DIRECTORY [-c] [-v]
+$ spav_prepare_data --help
+usage: spav_prepare_data [-h] -d DATA_DIRECTORY -o OUTPUT_DIRECTORY -s
+                         SERVER_DIRECTORY [-c] [-v]
 
 A script for preparing Splotch results for Span
 
@@ -59,9 +62,9 @@ optional arguments:
   -v, --version         show program's version number and exit
 ```
 
-For instance, you can run the following command
+For instance, if your Splotch input and output directories are ``$DATA_DIRECTORY`` and ``$OUTPUT_DIRECTORY`` (see [Splotch](https://github.com/tare/Splotch)), respectively, then you can prepare the data for Spav by executing the following command
 ```console
-$ python spav_prepare_data.py -d $DATA_DIRECTORY -o $OUTPUT_DIRECTORY -s $SPAV_DIRECTORY
+$ spav_prepare_data -d $DATA_DIRECTORY -o $OUTPUT_DIRECTORY -s $SPAV_DIRECTORY
 ```
 This command will create the directories ``$SPAV_DIRECTORY/static`` and ``$SPAV_DIRECTORY/data``.
 The directory ``$SPAV_DIRECTORY/static`` contains symbolic links pointing to the bright-field images and the ``$SPAV_DIRECTORY/data.hdf5`` file contains the estimates.
@@ -69,7 +72,9 @@ The directory ``$SPAV_DIRECTORY/static`` contains symbolic links pointing to the
 ### Deployment
 
 #### Standalone Bokeh server
-The script ``main.py`` implements our Bokeh application
+For detailed description of how run a Bokeh server, please see [https://bokeh.pydata.org/en/latest/docs/user_guide/server.html](https://bokeh.pydata.org/en/latest/docs/user_guide/server.html).
+
+The script ``server/main.py`` implements our Bokeh application
 ```console
 $ python main.py --help
 usage: main.py [-h] [--arrays] [--array] [--common-coordinate]
@@ -86,8 +91,13 @@ optional arguments:
   --level-coefficients  show the level coefficient view
   -v, --version         show program's version number and exit
 ```
+Additionally, the directory ``server`` contains ``theme.yaml`` and ``templates/index.html``.
 
-To fire up the Bokeh application with all the implemented views you can execute the following command
+First, let us copy the files from the directory ``server`` to the directory we created using the ``spav_prepare_data`` script
+```console
+$ cp -r server/* $SPAV_DIRECTORY/ 
+```
+Second, the Bokeh application with all the implemented views can started by executing the following command
 ```console
 $ bokeh serve $SPAV_DIRECTORY --show --args --arrays --array --common-coordinate --aar-coefficients --level-coefficients
 ```

@@ -9,7 +9,7 @@ import bokeh.io
 import bokeh.layouts
 import bokeh.models
 
-import spav
+import spav.utils
 
 import argparse
 
@@ -42,23 +42,23 @@ data_filename = os.path.join(os.path.dirname(__file__),'data/data.hdf5')
 static_directory = os.path.join(os.path.basename(os.path.dirname(__file__)),'static')
 
 if options.arrays:
-  view = spav.ExpressionOnArrays(data_filename,static_directory)
+  view = spav.utils.ExpressionOnArrays(data_filename,static_directory)
   tab_list.append(bokeh.models.widgets.Panel(child=view.layout,title='Expression on arrays'))
 
 if options.array:
-  view = spav.ExpressionOnArray(data_filename,static_directory)
+  view = spav.utils.ExpressionOnArray(data_filename,static_directory)
   tab_list.append(bokeh.models.widgets.Panel(child=view.layout,title='Expression on array'))
 
 if options.common_coordinate:
-  view = spav.ExpressionInCommonCoordinate(data_filename)
+  view = spav.utils.ExpressionInCommonCoordinate(data_filename)
   tab_list.append(bokeh.models.widgets.Panel(child=view.layout,title='Expression in common coordinate'))
 
 if options.level_coefficients:
-  view = spav.LevelExpressionCoefficients(data_filename)
+  view = spav.utils.LevelExpressionCoefficients(data_filename)
   tab_list.append(bokeh.models.widgets.Panel(child=view.layout,title='Expression coefficients per variable'))
 
 if options.aar_coefficients:
-  view = spav.AARExpressionCoefficients(data_filename)
+  view = spav.utils.AARExpressionCoefficients(data_filename)
   tab_list.append(bokeh.models.widgets.Panel(child=view.layout,title='Expression coefficients per AAR'))
 
 if len(tab_list) > 0:
