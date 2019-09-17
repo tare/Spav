@@ -15,7 +15,7 @@ import argparse
 
 import logging
 
-parser = argparse.ArgumentParser(description='Spav')
+parser = argparse.ArgumentParser(description='Spav server')
 parser.add_argument('--array',action='store_true',dest='array',required=False,
                     help='show the array view')
 parser.add_argument('--arrays',action='store_true',dest='arrays',required=False,

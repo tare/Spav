@@ -80,7 +80,7 @@ $ python main.py --help
 usage: main.py [-h] [--arrays] [--array] [--common-coordinate]
                [--aar-coefficients] [--level-coefficients] [-v]
 
-Spav
+Spav server
 
 optional arguments:
   -h, --help            show this help message and exit
